@@ -1,7 +1,7 @@
 package com.testtask.gofluent.config;
 
 import javax.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,21 +16,23 @@ import org.springframework.security.saml2.provider.service.web.Saml2MetadataFilt
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-  @Autowired
-  private RelyingPartyRegistrationRepository relyingPartyRegistrationRepository;
+  private final RelyingPartyRegistrationRepository relyingPartyRegistrationRepository;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http
         .authorizeRequests(authorize ->
-            authorize.antMatchers("/").permitAll().anyRequest().authenticated()
-        ).saml2Login();
+            authorize.antMatchers("/").permitAll().anyRequest().authenticated())
+        .saml2Login();
 
     // add auto-generation of ServiceProvider Metadata
-    Converter<HttpServletRequest, RelyingPartyRegistration> relyingPartyRegistrationResolver = new DefaultRelyingPartyRegistrationResolver(relyingPartyRegistrationRepository);
-    Saml2MetadataFilter filter = new Saml2MetadataFilter(relyingPartyRegistrationResolver, new OpenSamlMetadataResolver());
+    Converter<HttpServletRequest, RelyingPartyRegistration> relyingPartyRegistrationResolver =
+        new DefaultRelyingPartyRegistrationResolver(relyingPartyRegistrationRepository);
+    Saml2MetadataFilter filter =
+        new Saml2MetadataFilter(relyingPartyRegistrationResolver, new OpenSamlMetadataResolver());
     http.addFilterBefore(filter, Saml2WebSsoAuthenticationFilter.class);
   }
 
