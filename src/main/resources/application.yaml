@@ -1,0 +1,12 @@
+spring:
+  security:
+    saml2:
+      relyingparty:
+        registration:
+          okta-saml:
+            identityprovider:
+              entity-id: http://www.okta.com/exk8wl8as0GrX74bB5d7
+              verification.credentials:
+                - certificate-location: "classpath:cert/okta.crt"
+              singlesignon.url: https://dev-39875043.okta.com/app/dev-39875043_samlgofluentexample_1/exk8wl8as0GrX74bB5d7/sso/saml
+              singlesignon.sign-request: false
