@@ -14,7 +14,7 @@ import org.springframework.security.saml2.provider.service.registration.RelyingP
 
 @Configuration
 @RequiredArgsConstructor
-public class SighOnLoginConfig {
+public class SignOnLoginConfig {
 
   private final SamlLoginProperties samlLoginProperties;
 
